@@ -15,10 +15,7 @@ final class AssetLoading extends AssetState {}
 final class AssetLoaded extends AssetState {
   final List<dynamic> dataList;
 
-  AssetLoaded({required this.dataList}) {
-    super.datas.clear();
-    super.datas.addAll(dataList);
-  }
+  const AssetLoaded({required this.dataList});
 }
 
 final class AssetError extends AssetState {

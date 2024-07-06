@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tractian_challenge/src/repositories/asset/asset_repository.dart';
@@ -20,9 +22,15 @@ class AssetCubit extends Cubit<AssetState> {
         super(AssetInitial());
 
   Future<void> init(String companyId) async {
-    final locations = await _fetchLocations(companyId);
-    final assets = await _fetchAssets(companyId);
-    _fillData(locations, assets);
+    try {
+      emit(AssetLoading());
+      final locations = await _fetchLocations(companyId);
+      final assets = await _fetchAssets(companyId);
+      _fillData(locations, assets);
+    } on Exception catch (e, s) {
+      log('ERRO ao iniciar asset', error: e, stackTrace: s);
+      emit(AssetError(message: 'Algum erro ocorreu'));
+    }
   }
 
   Future<List<LocationModel>> _fetchLocations(String companyId) async {
